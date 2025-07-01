@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <link rel="icon" href="{{ url_for('static', filename='images/fevicon.png') }}" type="image/gif" />
+
+    <title>Apical Periodontitis Lesion Detection</title>
+
+    <!-- Bootstrap core CSS & Custom Styles-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        padding-bottom: 40px;
+      }
+
+      h1.page-title {
+        text-align: center;
+        margin-top: 60px;
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+        color: #020230;
+      }
+
+      .container-card {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        padding: 0 20px;
+      }
+
+      .card {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card-header {
+        background-color: #020230;
+        color: white;
+        padding: 12px 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .card-body {
+        padding: 20px;
+        font-size: 0.95rem;
+        color: #444;
+      }
+
+      .card-body ul {
+        padding-left: 20px;
+      }
+
+      .card table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      .card th,
+      .card td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+        font-size: 0.85rem;
+      }
+
+      .footer {
+        background-color: #020230;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+      }
+
+      .footer p {
+        margin: 0;
+      }
+
+      .table-clean,
+      .table-clean td,
+      .table-clean tr {
+        border: none !important;
+        padding: 2px 4px;
+        text-align: left;
+      }
+      .table-clean {
+        border-collapse: collapse;
+        width: auto;
+      }
+    </style>
+  </head>
+
+  <body class="sub_page">
+    <!-- header section -->
+    <div class="hero_area">
+      <header class="header_section">
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+              <span>🦷201402010 - Monika Angelia Panjaitan</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+              <span class=""> </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}"> Home </a></li>
+                <li class="nav-item active"><a class="nav-link" href="{{ url_for('about') }}">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('detection') }}">Detection</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </header>
+    </div>
+    <!-- end of header section -->
+
+    <h1 class="page-title">Tentang Aplikasi Ini</h1>
+
+    <div class="container-card">
+      <div class="card">
+        <div class="card-header"><i class="bi bi-book icon"></i> Informasi Ringkas Penelitian</div>
+        <div class="card-body">
+          <p>
+            Aplikasi ini merupakan implementasi model berdasarkan judul skripsi <strong>"Deteksi Lesi Periodontitis Apikal Berdasarkan Skala Periapical Index (PAI) Menggunakan Citra Radiografi Panoramik Dengan Metode EfficientDet."</strong>
+            Seperti yang tertuang pada judul, situs ini adalah implementasi dari model pembelajaran mesin EfficientDet yang sudah dilatih untuk mengenali lesi periodontitis apikal berdasarkan Periapical Index (PAI) dengan skor ≥ 3.
+            Penelitian skripsi ini merupakan salah satu syarat untuk mendapatkan gelar sarjana pada program studi Teknologi Informasi.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><i class="bi bi-diagram-3 icon"></i> Informasi Ringkas Model Yang Diimplementasikan</div>
+        <div class="card-body">
+          <table class="table-clean">
+            <tr>
+              <td style="padding: 1"><strong>Arsitektur</strong></td>
+              <td style="padding: 1px">:</td>
+              <td style="padding: 4px">EfficientDet-D4</td>
+            </tr>
+            <tr>
+              <td style="padding: 1px"><strong>Epoch</strong></td>
+              <td style="padding: 1px">:</td>
+              <td style="padding: 4px">40</td>
+            </tr>
+            <tr>
+              <td style="padding: 1px"><strong>Batch Size</strong></td>
+              <td style="padding: 1px">:</td>
+              <td style="padding: 4px">16</td>
+            </tr>
+            <tr>
+              <td style="padding: 1px"><strong>Train Loss</strong></td>
+              <td style="padding: 1x">:</td>
+              <td style="padding: 4px">0.31</td>
+            </tr>
+            <tr>
+              <td style="padding: 1px"><strong>Validation Loss</strong></td>
+              <td style="padding: 1px">:</td>
+              <td style="padding: 4px">0.43</td>
+            </tr>
+            <tr>
+              <td style="padding: 1px"><strong>mAP</strong></td>
+              <td style="padding: 4px">:</td>
+              <td style="padding: 4px">0.782</td>
+            </tr>
+            <tr>
+              <td style="padding: 1px"><strong>AR</strong></td>
+              <td style="padding: 4px">:</td>
+              <td style="padding: 4px">0.887</td>
+            </tr>
+            <tr>
+              <td style="padding: 1px"><strong>F1-Score</strong></td>
+              <td style="padding: 4px">:</td>
+              <td style="padding: 4px">0.830</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><i class="bi bi-list-check icon"></i> Panduan Penggunaan</div>
+        <div class="card-body">
+          <ul>
+            <li>Jenis citra radiografi gigi yang digunakan adalah <b>citra radiografi panoramik digital</b></li>
+            <li>Jenis file yang diterima : .JPG / .JPEG / PNG</li>
+            <li>Pedoman skala yang digunakan adalah Ørstavik’s Periapical Index (PAI) yaitu skala ordinal 5 tingkat yang digunakan untuk mengevaluasi kondisi periapikal gigi melalui gambar radiografi.</li>
+            <li>Lesi yang dideteksi adalah lesi dengan skor ≥ 3</li>
+            <li>Output yang diberikan berupa gambar dengan <i>bounding box</i> pada area sekitar lesi, klasifikasi kelas masing-masing lesi berdasarkan skor PAI-nya, serta confidence-score model dalam memprediksi objek yang terdeteksi.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <br /><br />
+
+    <div class="container-card">
+      <div class="card">
+        <div class="card-header"><i class="bi bi-bar-chart-line icon"></i> Rangkuman Hasil Percobaan Training</div>
+        <div class="card-body">
+          <table>
+            <thead>
+              <tr>
+                <th>Model Pre-trained</th>
+                <th>Epoch</th>
+                <th>Batch Size</th>
+                <th>mAP</th>
+                <th>AR</th>
+                <th>F1-Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>EfficientDet-D0</td>
+                <td>40</td>
+                <td>16</td>
+                <td>0.333</td>
+                <td>0.180</td>
+                <td>0.213</td>
+              </tr>
+              <tr>
+                <td>EfficientDet-D3</td>
+                <td>40</td>
+                <td>16</td>
+                <td>0.754</td>
+                <td>0.861</td>
+                <td>0.812</td>
+              </tr>
+              <tr>
+                <td>EfficientDet-D3</td>
+                <td>40</td>
+                <td>32</td>
+                <td>0.732</td>
+                <td>0.842</td>
+                <td>0.798</td>
+              </tr>
+              <tr>
+                <td><strong>EfficientDet-D4</strong></td>
+                <td><strong>40</strong></td>
+                <td><strong>16</strong></td>
+                <td><strong>0.782</strong></td>
+                <td><strong>0.887</strong></td>
+                <td><strong>0.830</strong></td>
+              </tr>
+              <tr>
+                <td>EfficientDet-D4</td>
+                <td>40</td>
+                <td>32</td>
+                <td>0.768</td>
+                <td>0.879</td>
+                <td>0.824</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <br /><br />
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2025 Monika Angelia Panjaitan. All rights reserved.</p>
+    </footer>
+
+    <!-- JS Scripts -->
+    <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+  </body>
+</html>

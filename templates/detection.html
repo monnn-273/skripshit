@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="icon" href="{{ url_for('static', filename='images/fevicon.png') }}" type="image/gif" />
+    <title>Deteksi Lesi Periapikal</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        padding-bottom: 100px; /* Add padding for footer */
+      }
+
+      #loading {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 9999;
+        text-align: center;
+        color: white;
+      }
+
+      #loading .spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .service_section {
+        padding: 50px 0;
+        text-align: center;
+      }
+
+      .upload-container {
+        width: 50%;
+        margin: auto;
+        padding: 20px;
+        border: 2px dashed #007bff;
+        border-radius: 10px;
+        text-align: center;
+        background-color: #f9f9f9;
+      }
+
+      .upload-container input {
+        display: none;
+      }
+
+      .upload-container label {
+        display: block;
+        padding: 15px;
+        background: #007bff;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      .upload-container label:hover {
+        background: #0056b3;
+      }
+
+      .preview {
+        margin-top: 20px;
+      }
+
+      #preview-img {
+        max-width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-detect {
+        width: 50%;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .btn-detect:hover {
+        background: #218838;
+      }
+
+      .alert-success {
+        margin-top: 20px;
+        color: #155724;
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        border-radius: 5px;
+        padding: 10px;
+      }
+
+      .footer {
+        background-color: #020230;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+      }
+
+      .footer p {
+        margin: 0;
+      }
+    </style>
+  </head>
+
+  <body class="sub_page">
+    <div class="hero_area">
+      <header class="header_section">
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+              <span>🦷201402010 - Monika Angelia Panjaitan</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class=""> </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span> </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="{{ url_for('detection') }}">Detection</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </header>
+    </div>
+
+    <section class="service_section">
+      <div class="container">
+        <div class="heading_container heading_center">
+          <h2>Upload Gambar Radiografi Panoramik</h2>
+          <p>Format file yang didukung: JPG, JPEG, PNG</p>
+        </div>
+      </div>
+
+      <br />
+      <div class="container">
+        <div id="loading">
+          <div class="spinner">
+            <i class="fa fa-spinner fa-spin fa-3x"></i>
+            <p>Sedang memproses gambar...</p>
+          </div>
+        </div>
+
+        <form id="upload-form" action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
+          <div class="upload-container">
+            <input type="file" id="file-input" name="file" accept="image/*" onchange="previewImage(event)" required />
+            <label for="file-input"><i class="fa fa-upload"></i>&nbsp;Pilih Gambar</label>
+            <div class="preview">
+              <img id="preview-img" src="#" alt="Preview Gambar" style="display: none" />
+            </div>
+          </div>
+          <button type="submit" class="btn-detect"><i class="fa fa-search"></i>&nbsp;Deteksi Lesi</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+        <div class="alert alert-{{ category if category else 'info' }} mt-3">{{ message }}</div>
+        {% endfor %} {% endif %} {% endwith %}
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>© 2025 Monika Angelia Panjaitan. All rights reserved.</p>
+    </footer>
+
+
+    <!-- SCRIPT -->
+    <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+    <script>
+      function previewImage(event) {
+        const input = event.target;
+        const reader = new FileReader();
+        reader.onload = function () {
+          const imgElement = document.getElementById("preview-img");
+          imgElement.src = reader.result;
+          imgElement.style.display = "block";
+        };
+        if (input.files && input.files[0]) {
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("upload-form");
+        const loading = document.getElementById("loading");
+
+        if (form) {
+          form.addEventListener("submit", function () {
+            const fileInput = document.getElementById("file-input");
+            // Tampilkan spinner hanya jika file sudah dipilih
+            if (fileInput && fileInput.files && fileInput.files.length > 0) {
+              loading.style.display = "block";
+            } else {
+              // Jika tidak ada file, 'required' attribute pada input akan mencegah submit
+              // Anda bisa menambahkan validasi JS tambahan di sini jika perlu
+            }
+          });
+        }
+      });
+    </script>
+    <!-- END OF SCRIPT -->
+  </body>
+</html>
